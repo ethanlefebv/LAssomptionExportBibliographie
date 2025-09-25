@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# macOS stuff
+.DS_Store
+
+# Generated files
+*.docx
