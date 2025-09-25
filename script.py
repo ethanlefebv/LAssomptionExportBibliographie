@@ -5,9 +5,11 @@ import urllib
 import ssl
 import sys
 import shutil
+import tempfile
 
 
-if getattr(sys, 'frozen', False):  # Running in PyInstaller bundle
+# Set the pandoc path if running from a PyInstaller (compiled) executable
+if getattr(sys, 'frozen', False):
     pandoc_path = os.path.join(sys._MEIPASS, "pypandoc", "files")
     pypandoc.pandoc_path = pandoc_path
 
@@ -20,8 +22,7 @@ def download_replace_images(soup):
         context = ssl.create_default_context()
         context.set_default_verify_paths()
 
-    img_dir = os.path.abspath("images")
-    os.makedirs(img_dir, exist_ok=True)
+    img_dir = tempfile.mkdtemp()
 
     count = 0
     for img in soup.find_all("img"):
@@ -50,8 +51,20 @@ def remove_image_labels(row):
         sibling = next_sibling
 
 
+def clean_up_title(row):
+    link = row.find("a")
+    full_title = link.string
+
+    # e.g. of full title : `Le silence : roman / Dennis Lehane ; traduit de l'américain par François Happe.`
+    # We only want to keep the actual title, so remove everything after the first `/` (the author part)
+    title = full_title.split("/", 1)[0]
+
+    # Write it back in the link
+    link.string = title.strip()
+
+
 def should_keep(row):
-    keywords = {"Auteur", "Éditeur", "Description", "Résumé", "Cote"}
+    keywords = {"Auteur", "Résumé", "Cote"}
     has_field_of_interest = any(keyword in row.get_text() for keyword in keywords)
     has_title_link = bool(row.find("a"))
     has_image = bool(row.find("img"))
@@ -75,6 +88,13 @@ def main(input: str):
     for table in soup.find_all("table"):
         for row in table.find_all("tr"):
             if should_keep(row):
+                # The row contains important stuff - process it further if necessary
+
+                # Remove "author" from title (title is a link, "a")
+                if bool(row.find("a")):
+                    clean_up_title(row)
+
+                # Clean up images
                 if bool(row.find("img")):
                     remove_image_labels(row)
             else:
@@ -86,7 +106,7 @@ def main(input: str):
 
     # Remove downloaded images
     if os.path.exists(img_folder):
-        shutil.rmtree(img_folder)
+        shutil.rmtree(img_folder, ignore_errors=True)
 
 
 if __name__ == "__main__":
