@@ -15,8 +15,10 @@ if getattr(sys, 'frozen', False):
 
 
 def download_replace_images(soup):
-    if sys.platform == "darwin":
-        # Give up verifying certificates
+    if True:  # sys.platform == "darwin":
+        # Give up verifying certificates on every platform
+        # Only because the library's website's certificate isn't "trusted",
+        # but it's actually fine when opening in a browser?
         context = ssl._create_unverified_context()
     else:
         context = ssl.create_default_context()
