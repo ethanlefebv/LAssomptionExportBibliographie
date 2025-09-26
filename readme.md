@@ -11,6 +11,14 @@
 - Résumé
 - Cote (pas ISBN)
 
+### Mise à jour 2025.09.24
+On désire garder seulement :
+- Image
+- Titre (sans l'auteur dans le titre)
+- Auteur
+- Résumé
+- Cote (pas ISBN)
+
 ## Format d'entrée
 
 - HTML (téléchargé depuis le catalogue en ligne)
@@ -22,6 +30,12 @@
 
 ## Utilisation
 
+Commencer par cloner le repo. Les commandes ci-dessous doivent être roulées depuis le root du repo.
+
+L'utilisation d'un environnement virtuel de Python ("venv") est recommandé pour gérer les dépendances de ce projet séparément des packages installés globalement.
+
+- `python3 -m venv venv`
+- `source venv/bin/activate` (ou l'équivalent sur votre système)
 - `python3 -m pip install -r requirements.txt` (à faire qu'une seule fois)
 - `python3 script.py <fichier.html>`
 
@@ -29,6 +43,8 @@
 
 La génération de l'exécutable requiert Python 3 et les dépendances, mais l'utilisation de l'exécutable ne dépendera pas de la présence de Python sur l'ordinateur.
 
+Ne pas oublier de remplacer `<path/to/pandoc>` dans la commande ci-dessous par l'emplacement de votre exécutable `pandoc`.
+(Exemple de `<path/to/pandoc>` dans un venv : `venv/lib/python3.13/site-packages/pypandoc/files/pandoc`)
+
 - `pyinstaller --onefile --add-binary "<path/to/pandoc>:pypandoc/files/" script.py`
 
-(exemple de <path/to/pandoc> dans un venv : `venv/lib/python3.13/site-packages/pypandoc/files/pandoc`)
