@@ -33,6 +33,7 @@ On désire garder seulement :
 Commencer par cloner le repo. Les commandes ci-dessous doivent être roulées depuis le root du repo.
 
 L'utilisation d'un environnement virtuel de Python ("venv") est recommandé pour gérer les dépendances de ce projet séparément des packages installés globalement.
+Pour les commandes ci-dessous, `python3` est utilisé à titre d'exemple - `python` peut être utilisé s'il pointe vers Python 3 dans l'environnement virtuel.
 
 - `python3 -m venv venv`
 - `source venv/bin/activate` (ou l'équivalent sur votre système)
@@ -44,7 +45,9 @@ L'utilisation d'un environnement virtuel de Python ("venv") est recommandé pour
 La génération de l'exécutable requiert Python 3 et les dépendances, mais l'utilisation de l'exécutable ne dépendera pas de la présence de Python sur l'ordinateur.
 
 Ne pas oublier de remplacer `<path/to/pandoc>` dans la commande ci-dessous par l'emplacement de votre exécutable `pandoc`.
-(Exemple de `<path/to/pandoc>` dans un venv : `venv/lib/python3.13/site-packages/pypandoc/files/pandoc`)
+(Exemple de `<path/to/pandoc>` dans un venv sur Windows : `venv/Lib/site-packages/pypandoc/files/pandoc.exe`)
+
+Les guillemets autour de `<path/to/pandoc>:pypandoc/files/` sont requis dans la commande.
 
 - `pyinstaller --onefile --add-binary "<path/to/pandoc>:pypandoc/files/" script.py`
 
